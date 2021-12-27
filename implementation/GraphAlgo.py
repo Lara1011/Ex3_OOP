@@ -1,10 +1,11 @@
 from api.GraphAlgoInterface import GraphAlgoInterface
 from api.GraphInterface import GraphInterface
-from DiGraph import DiGraph
+from implementation.Node import Node
+from implementation.Edge import Edge
+from implementation.DiGraph import DiGraph
 import json
 import string
 from typing import List, cast
-from queue import PriorityQueue
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -14,11 +15,16 @@ class GraphAlgo(GraphAlgoInterface):
             graph = DiGraph()
         self.graph = graph
 
+    def __init__(self, json_file: str):
+        self.load_from_json(json_file)
+
     def get_graph(self) -> GraphInterface:
         return self.graph
 
     def load_from_json(self, file_name: str) -> bool:
         try:
+            graph = DiGraph()
+            self.graph = graph
             data = json.load(open(file_name))
             for currNode in data["Nodes"]:
                 if "pos" in currNode:
@@ -36,11 +42,15 @@ class GraphAlgo(GraphAlgoInterface):
             return False
 
     def save_to_json(self, file_name: str) -> bool:
-        dict = {"Nodes": [], "Edges": []}
-        for node in self.graph.Nodes:
-            dict["Nodes"].append({"id": node.getId(), "pos": node.getx() + "," + node.gety() + "," + node.getz()})
+        dict = {"Edges": [], "Nodes": []}
         for edge in self.graph.Edges:
-            dict["Edges"].append({"src": edge.getSrc(), "dest": edge.getDest(), "w": edge.getWeight()})
+            dict["Edges"].append({"src": self.graph.Edges[edge].getSrc(), "w": self.graph.Edges[edge].getWeight(),
+                                  "dest": self.graph.Edges[edge].getDest()})
+
+        for node in self.graph.Nodes:
+            dict["Nodes"].append({"pos": (str(self.graph.Nodes[node].getx()) + "," + str(
+                self.graph.Nodes[node].gety()) + "," +
+                                          str(self.graph.Nodes[node].getz())), "id": self.graph.Nodes[node].getId()})
 
         try:
             with open(file_name, 'w') as f:
@@ -51,9 +61,7 @@ class GraphAlgo(GraphAlgoInterface):
             return False
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
-        l1 = shortestPath(self.graph, id1, id2)
-        sum1 = sum(l1)
-        return sum1, l1
+        raise NotImplementedError
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         """
@@ -78,36 +86,24 @@ class GraphAlgo(GraphAlgoInterface):
         raise NotImplementedError
 
 
-def Dijkstra(G, src, dest):
-    D = {}  # dictionary of final distances
-    P = {}  # dictionary of predecessors
-    Q = PriorityQueue()  # estimated distances of non-final vertices
-    Q.put((0.0, src))
+if __name__ == '__main__':
+    n0 = Node(0, 35.18753053591606, 32.10378225882353, 0.0)
+    n1 = Node(1, 35.18958953510896, 32.10785303529412, 0.0)
+    n2 = Node(2, 35.19341035835351, 32.10610841680672, 0.0)
+    n3 = Node(3, 35.197528356739305, 32.1053088, 0.0)
+    n4 = Node(4, 35.2016888087167, 32.10601755126051, 0.0)
 
-    for v in Q:
-        D[v] = Q[v]
-        if v == dest:
-            break
+    e0 = Edge(0, 2, 1)
+    e1 = Edge(0, 1, 1)
+    e2 = Edge(1, 3, 1)
+    e3 = Edge(2, 3, 5)
+    e4 = Edge(3, 2, 5)
+    e5 = Edge(3, 4, 1)
+    e6 = Edge(4, 0, 1)
 
-        for w in G[v]:
-            vwLength = D[v] + G[v][w]
-            if w in D:
-                if vwLength < D[w]:
-                    raise ValueError("Dijkstra: found better path to already-final vertex")
-            elif w not in Q or vwLength < Q[w]:
-                Q[w] = vwLength
-                P[w] = v
-
-    return (D, P)
-
-
-def shortestPath(G, start, end):
-    D, P = Dijkstra(G, start, end)
-    Path = []
-    while 1:
-        Path.append(end)
-        if end == start:
-            break
-        end = P[end]
-    Path.reverse()
-    return Path
+    g = DiGraph()
+    g.add_node(n0.getId(), (n0.getx(), n0.gety(), n0.getz()))
+    g.add_node(n1.getId(), (n1.getx(), n1.gety(), n1.getz()))
+    g.add_node(n2.getId(), (n2.getx(), n2.gety(), n2.getz()))
+    g.add_node(n3.getId(), (n3.getx(), n3.gety(), n3.getz()))
+    g.add_node(n4.getId(), (n4.getx(), n4.gety(), n4.getz()))
