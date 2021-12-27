@@ -31,3 +31,9 @@ class Node:
 
     def setz(self, z):
         self.z = z
+
+    def getIn(self):
+        return self.in_
+
+    def getOut(self):
+        return self.out_

@@ -1,6 +1,6 @@
 from api.GraphInterface import GraphInterface
-from Edge import Edge
-from Node import Node
+from implementation.Edge import Edge
+from implementation.Node import Node
 
 
 class DiGraph(GraphInterface):
@@ -61,14 +61,14 @@ class DiGraph(GraphInterface):
                 return False
 
     def remove_node(self, node_id: int) -> bool:
-        if node_id in self.Nodes:
+        if node_id in self.Nodes.keys():
             for destNode in self.Nodes.get(node_id).out_:
                 remove = (node_id, destNode)
-                del self.Nodes[remove].getIn()[node_id]
+                del self.Nodes[destNode].getIn()[node_id]
                 del self.Edges[remove]
             for srcNode in self.Nodes.get(node_id).in_:
-                remove = (node_id, srcNode)
-                del self.Nodes[remove].getOut()[node_id]
+                del self.Nodes[srcNode].getOut()[node_id]
+            del self.Nodes[node_id]
             if node_id in self.Nodes:
                 return False
             else:
