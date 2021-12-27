@@ -3,12 +3,14 @@ from api.GraphInterface import GraphInterface
 from DiGraph import DiGraph
 import json
 import string
-from typing import List,cast
+from typing import List, cast
+from queue import PriorityQueue
+
 
 class GraphAlgo(GraphAlgoInterface):
 
-    def __init__(self,graph):
-        if graph == None :
+    def __init__(self, graph):
+        if graph == None:
             graph = DiGraph()
         self.graph = graph
 
@@ -16,62 +18,42 @@ class GraphAlgo(GraphAlgoInterface):
         return self.graph
 
     def load_from_json(self, file_name: str) -> bool:
-       try:
-           data = json.load(open(file_name))
-           pos = False
-           for currNode in data["Nodes"]:
-               if "pos" in currNode:
-                   str = cast(string,currNode["pos"])
-                   splitString = str.split(',')
-                   self.graph.add_node(currNode["id"],(float(splitString[0]),float(splitString[1]),float(splitString[2])))
-               else:
-                   self.graph.add_node(currNode["id"])
-           for currEdge in data["Edges"]:
-               self.graph.add_edge(currEdge["src"],currEdge["dest"],currEdge["w"])
-           return True
-       except Exception as e:
-           print(e)
-           return False
+        try:
+            data = json.load(open(file_name))
+            for currNode in data["Nodes"]:
+                if "pos" in currNode:
+                    str = cast(string, currNode["pos"])
+                    splitString = str.split(',')
+                    self.graph.add_node(currNode["id"],
+                                        (float(splitString[0]), float(splitString[1]), float(splitString[2])))
+                else:
+                    self.graph.add_node(currNode["id"])
+            for currEdge in data["Edges"]:
+                self.graph.add_edge(currEdge["src"], currEdge["dest"], currEdge["w"])
+            return True
+        except Exception as e:
+            print(e)
+            return False
 
     def save_to_json(self, file_name: str) -> bool:
-        dict = {"Nodes" : [], "Edges" : []}
+        dict = {"Nodes": [], "Edges": []}
         for node in self.graph.Nodes:
-            dict["Nodes"].append({"id" : node.getId(),"pos" : node.getx()+","+node.gety()+","+node.getz()})
+            dict["Nodes"].append({"id": node.getId(), "pos": node.getx() + "," + node.gety() + "," + node.getz()})
         for edge in self.graph.Edges:
-            dict["Edges"].append({"src" : edge.getSrc(), "dest" : edge.getDest(), "w" : edge.getWeight()})
+            dict["Edges"].append({"src": edge.getSrc(), "dest": edge.getDest(), "w": edge.getWeight()})
 
         try:
-            with open(file_name,'w') as f:
-                json.dump(dict,indent = 2,fp = f)
+            with open(file_name, 'w') as f:
+                json.dump(dict, indent=2, fp=f)
             return True
         except Exception as e:
             print(e)
             return False
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
-        """
-        Returns the shortest path from node id1 to node id2 using Dijkstra's Algorithm
-        @param id1: The start node id
-        @param id2: The end node id
-        @return: The distance of the path, a list of the nodes ids that the path goes through
-        Example:
-#      >>> from GraphAlgo import GraphAlgo
-#       >>> g_algo = GraphAlgo()
-#        >>> g_algo.addNode(0)
-#        >>> g_algo.addNode(1)
-#        >>> g_algo.addNode(2)
-#        >>> g_algo.addEdge(0,1,1)
-#        >>> g_algo.addEdge(1,2,4)
-#        >>> g_algo.shortestPath(0,1)
-#        (1, [0, 1])
-#        >>> g_algo.shortestPath(0,2)
-#        (5, [0, 1, 2])
-        Notes:
-        If there is no path between id1 and id2, or one of them dose not exist the function returns (float('inf'),[])
-        More info:
-        https://en.wikipedia.org/wiki/Dijkstra's_algorithm
-        """
-        raise NotImplementedError
+        l1 = shortestPath(self.graph, id1, id2)
+        sum1 = sum(l1)
+        return sum1, l1
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         """
@@ -94,3 +76,38 @@ class GraphAlgo(GraphAlgoInterface):
         @return: None
         """
         raise NotImplementedError
+
+
+def Dijkstra(G, src, dest):
+    D = {}  # dictionary of final distances
+    P = {}  # dictionary of predecessors
+    Q = PriorityQueue()  # estimated distances of non-final vertices
+    Q.put((0.0, src))
+
+    for v in Q:
+        D[v] = Q[v]
+        if v == dest:
+            break
+
+        for w in G[v]:
+            vwLength = D[v] + G[v][w]
+            if w in D:
+                if vwLength < D[w]:
+                    raise ValueError("Dijkstra: found better path to already-final vertex")
+            elif w not in Q or vwLength < Q[w]:
+                Q[w] = vwLength
+                P[w] = v
+
+    return (D, P)
+
+
+def shortestPath(G, start, end):
+    D, P = Dijkstra(G, start, end)
+    Path = []
+    while 1:
+        Path.append(end)
+        if end == start:
+            break
+        end = P[end]
+    Path.reverse()
+    return Path

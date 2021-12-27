@@ -2,7 +2,8 @@ from api.GraphInterface import GraphInterface
 from Edge import Edge
 from Node import Node
 
-class DiGraph (GraphInterface):
+
+class DiGraph(GraphInterface):
 
     def __init__(self):
         self.Nodes = dict()
@@ -28,15 +29,15 @@ class DiGraph (GraphInterface):
         return self.MC
 
     def add_edge(self, id1: int, id2: int, weight: float) -> bool:
-        if (id1,id2) in self.Edges:
+        if (id1, id2) in self.Edges:
             pass
         else:
             if id1 in self.Nodes and id2 in self.Nodes:
-                edge = Edge(id1,id2,weight)
-                self.Edges[(id1,id2)] = edge
+                edge = Edge(id1, id2, weight)
+                self.Edges[(id1, id2)] = edge
                 self.Nodes.get(id1).out_[id2] = weight
                 self.Nodes.get(id2).in_[id1] = weight
-                if (id1,id2) in self.Edges:
+                if (id1, id2) in self.Edges:
                     self.MC = self.MC + 1
                     return True
                 else:
@@ -49,7 +50,7 @@ class DiGraph (GraphInterface):
             pass
         else:
             if pos == None:
-                self.Nodes[node_id] = Node(node_id,None, None,None)
+                self.Nodes[node_id] = Node(node_id, None, None, None)
             else:
                 self.Nodes[node_id] = Node(node_id, pos[0], pos[1], pos[2])
 
@@ -62,7 +63,7 @@ class DiGraph (GraphInterface):
     def remove_node(self, node_id: int) -> bool:
         if node_id in self.Nodes:
             for destNode in self.Nodes.get(node_id).out_:
-                remove = (node_id,destNode)
+                remove = (node_id, destNode)
                 del self.Nodes[remove].getIn()[node_id]
                 del self.Edges[remove]
             for srcNode in self.Nodes.get(node_id).in_:
@@ -76,15 +77,13 @@ class DiGraph (GraphInterface):
         else:
             pass
 
-
-
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
         if node_id1 in self.Nodes and node_id2 in self.Nodes:
-            if (node_id1,node_id2) in self.Edges:
-                del self.Edges[(node_id1,node_id2)]
+            if (node_id1, node_id2) in self.Edges:
+                del self.Edges[(node_id1, node_id2)]
                 del self.Nodes.get(node_id1).out_[node_id2]
                 del self.Nodes.get(node_id2).in_[node_id1]
-                if(node_id1,node_id2) in self.Edges:
+                if (node_id1, node_id2) in self.Edges:
                     return False
                 else:
                     self.MC = self.MC + 1
