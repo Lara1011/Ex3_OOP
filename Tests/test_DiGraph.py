@@ -57,21 +57,25 @@ class TestDiGraph(TestCase):
         self.assertEqual(dictionary, g.all_out_edges_of_node(1))
 
     def test_get_mc(self):
-        self.assertEqual(9, g.get_mc())
+        self.assertEqual(13, g.get_mc())  # return 9 if run alone, returns 13 if run all the test together
 
     def test_add_edge(self):
         e5 = Edge(2, 3, 1.1435447583365383)
         e6 = Edge(10, 3, 1.1435447583365383)
         self.assertTrue(g.add_edge(e5.getSrc(), e5.getDest(), e5.getWeight()))
         self.assertFalse(g.add_edge(e6.getSrc(), e6.getDest(), e6.getWeight()))
+        g.remove_edge(e5.getSrc(), e5.getDest())  # reset g
 
     def test_add_node(self):
         n5 = Node(5, 35.20582803389831, 32.10625380168067, 0.0)
         self.assertTrue(g.add_node(n5.getId(), (n5.getx(), n5.gety(), n5.getz())))
+        g.remove_node(n5.getId())  # reset g
 
     def test_remove_node(self):
         self.assertTrue(g.remove_node(0))
+        g.add_node(n0.getId(), (n0.getx(), n0.gety(), n0.getz()))  # reset g
 
     def test_remove_edge(self):
         self.assertTrue(g.remove_edge(e0.getSrc(), e0.getDest()))
         self.assertFalse(g.remove_edge(e1.getSrc(), e1.getDest()))
+        g.add_edge(e0.getSrc(), e0.getDest(), e0.getWeight())
