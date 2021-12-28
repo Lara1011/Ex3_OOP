@@ -15,18 +15,24 @@ class Node:
         self.id = id
 
     def getx(self):
+        if (self.x == None):
+            return -1
         return self.x
 
     def setx(self, x):
         self.x = x
 
     def gety(self):
+        if (self.y == None):
+            return -1
         return self.y
 
     def sety(self, y):
         self.y = y
 
     def getz(self):
+        if(self.z == None):
+            return -1
         return self.z
 
     def setz(self, z):
