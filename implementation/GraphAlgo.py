@@ -1,5 +1,5 @@
 import heapq
-import sys
+import matplotlib.pyplot as plt
 from collections import defaultdict
 from api.GraphAlgoInterface import GraphAlgoInterface
 from api.GraphInterface import GraphInterface
@@ -89,25 +89,24 @@ class GraphAlgo(GraphAlgoInterface):
                 path = path + shortestPath[1]
         return path, weight
 
-
     def centerPoint(self) -> (int, float):
-            """
-            Finds the node that has the shortest distance to it's farthest node.
-            :return: The nodes id, min-maximum distance
-            """
-            center = 0
-            minMaxWeight = float("inf")
-            for node in self.graph.get_all_v():
-                maximum = 0
-                distance = self.Dijkstra_v2(node)
-                for dest in distance.values():
-                    if maximum < dest:
-                        maximum = dest
-                temp = maximum
-                if temp < minMaxWeight:
-                    center = node
-                    minMaxWeight = temp
-            return center, minMaxWeight
+        """
+        Finds the node that has the shortest distance to it's farthest node.
+        :return: The nodes id, min-maximum distance
+        """
+        center = 0
+        minMaxWeight = float("inf")
+        for node in self.graph.get_all_v():
+            maximum = 0
+            distance = self.Dijkstra_v2(node)
+            for dest in distance.values():
+                if maximum < dest:
+                    maximum = dest
+            temp = maximum
+            if temp < minMaxWeight:
+                center = node
+                minMaxWeight = temp
+        return center, minMaxWeight
 
     def plot_graph(self) -> None:
         """
@@ -116,6 +115,21 @@ class GraphAlgo(GraphAlgoInterface):
         Otherwise, they will be placed in a random but elegant manner.
         @return: None
         """
+        plt.style.use("seaborn-whitegrid")
+        for currNode in self.graph.Nodes.values():
+            plt.plot(currNode.getx(), currNode.gety(), markersize=18, marker='o', color="hotpink")
+            plt.text(currNode.getx(), currNode.gety(), currNode.getId(), color="black", fontsize=11, fontweight="bold",
+                     horizontalalignment='center',
+                     verticalalignment='center')
+            for currEdge in self.graph.all_out_edges_of_node(currNode.getId()):
+                plt.annotate("", xy=(self.graph.Nodes[currEdge].getx(), self.graph.Nodes[currEdge].gety()),
+                             xytext=(currNode.getx(), currNode.gety()),
+                             arrowprops=dict(arrowstyle="<-", lw=1, alpha=0.7, color="navy"))
+        plt.xlabel('X axis')
+        plt.ylabel('Y axis')
+        plt.grid(False)
+        plt.tight_layout()
+        plt.show()
 
     #########################################################################
     #########################################################################
@@ -307,13 +321,14 @@ if __name__ == '__main__':
 
     g1 = DiGraph()
     GraphAlgo = GraphAlgo(g)
-    #GraphAlgo.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A1.json")
-    #GraphAlgo.load_from_json("C:\\Users\\malak\\OneDrive\\Desktop\\LargeConnectedGraphs\\10000Nodes.json")
+    # GraphAlgo.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A1.json")
+    # GraphAlgo.load_from_json("C:\\Users\\malak\\OneDrive\\Desktop\\LargeConnectedGraphs\\10000Nodes.json")
     GraphAlgo.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A1.json")
 
     # print(GraphAlgo.shortest_path(1, 8))
-    #print(GraphAlgo.centerPoint())
+    # print(GraphAlgo.centerPoint())
+    GraphAlgo.plot_graph()
     lst = []
     for i in range(0, 17):
         lst.append(i)
-    print(GraphAlgo.TSP(lst))
+    # print(GraphAlgo.TSP(lst))
