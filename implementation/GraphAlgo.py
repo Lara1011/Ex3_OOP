@@ -1,3 +1,6 @@
+import sys
+import heapq
+from collections import defaultdict
 from api.GraphAlgoInterface import GraphAlgoInterface
 from api.GraphInterface import GraphInterface
 from implementation.Node import Node
@@ -6,11 +9,12 @@ from implementation.DiGraph import DiGraph
 import json
 import string
 from typing import List, cast
+from queue import PriorityQueue
 
 
 class GraphAlgo(GraphAlgoInterface):
 
-    def __init__(self, graph):
+    def __init__(self, graph: DiGraph = None):
         if graph == None:
             graph = DiGraph()
         self.graph = graph
@@ -61,7 +65,7 @@ class GraphAlgo(GraphAlgoInterface):
             return False
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
-        raise NotImplementedError
+        return self.Dijkstra(id1, id2)
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         """
@@ -85,6 +89,43 @@ class GraphAlgo(GraphAlgoInterface):
         """
         raise NotImplementedError
 
+    def Dijkstra(self, src: int, dest: int):
+        distance = defaultdict(lambda: float('inf'))
+        prev = {}
+        visited = set()
+        list_ = []
+        distance[src] = 0
+        heapq.heappush(list_, (0, src))
+        if self.graph.e_size() == 0:
+            return float('inf'), []
+        while list_:
+            s = heapq.heappop(list_)
+            node, dist = s[1], s[0]
+            visited.add(node)
+            for neighbor, weight in self.graph.all_out_edges_of_node(node).items():
+                if neighbor in visited:
+                    continue
+                updateDist = dist + weight
+                if distance[neighbor] > updateDist:
+                    prev[neighbor] = node
+                    distance[neighbor] = updateDist
+                    heapq.heappush(list_, (updateDist, neighbor))
+
+        if dest not in distance:
+            return float('inf'), []
+
+        path = list()
+        index = dest
+        path.append(index)
+        while index != src:
+            index = prev.get(index)
+            path.insert(0, index)
+        if dest in distance:
+            weight = distance.get(dest)
+        else:
+            return float('inf'), []
+        return weight, path
+
 
 if __name__ == '__main__':
     n0 = Node(0, 35.18753053591606, 32.10378225882353, 0.0)
@@ -107,3 +148,14 @@ if __name__ == '__main__':
     g.add_node(n2.getId(), (n2.getx(), n2.gety(), n2.getz()))
     g.add_node(n3.getId(), (n3.getx(), n3.gety(), n3.getz()))
     g.add_node(n4.getId(), (n4.getx(), n4.gety(), n4.getz()))
+
+    g.add_edge(e0.getSrc(), e0.getDest(), e0.getWeight())
+    g.add_edge(e1.getSrc(), e1.getDest(), e1.getWeight())
+    g.add_edge(e2.getSrc(), e2.getDest(), e2.getWeight())
+    g.add_edge(e3.getSrc(), e3.getDest(), e3.getWeight())
+    g.add_edge(e4.getSrc(), e4.getDest(), e4.getWeight())
+    g.add_edge(e5.getSrc(), e5.getDest(), e5.getWeight())
+    g.add_edge(e6.getSrc(), e6.getDest(), e6.getWeight())
+
+    GraphAlgo = GraphAlgo("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A0.json")
+    print(GraphAlgo.shortest_path(1, 8))
