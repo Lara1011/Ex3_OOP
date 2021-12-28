@@ -12,7 +12,7 @@ from typing import List, cast
 
 
 class GraphAlgo(GraphAlgoInterface):
-  #  sys.setrecursionlimit(10**6)
+    #  sys.setrecursionlimit(10**6)
     def __init__(self, graph: DiGraph = None):
         if graph == None:
             graph = DiGraph()
@@ -69,25 +69,45 @@ class GraphAlgo(GraphAlgoInterface):
         :param node_lst: A list of nodes id's
         :return: A list of the nodes id's in the path, and the overall distance
         """
+        if len(node_lst) == 0:
+            return [], float("inf")
+        if len(node_lst) == 1:
+            return node_lst, 0
+        nodes = node_lst
+        shortestPath = self.shortest_path(nodes.pop(0), nodes.pop(0))
+        path = []
+        weight = 0
+        weight = weight + shortestPath[0]
+        path = path + shortestPath[1]
+        while nodes:
+            currNode = nodes.pop(0)
+            if currNode in path:
+                continue
+            if len(path) != 0:
+                shortestPath = self.shortest_path(path.pop(len(path) - 1), currNode)
+                weight = weight + shortestPath[0]
+                path = path + shortestPath[1]
+        return path, weight
+
 
     def centerPoint(self) -> (int, float):
-        """
-        Finds the node that has the shortest distance to it's farthest node.
-        :return: The nodes id, min-maximum distance
-        """
-        center = 0
-        minMaxWeight = float("inf")
-        for node in self.graph.get_all_v():
-            maximum = 0
-            distance = self.Dijkstra_v2(node)
-            for dest in distance.values():
-                if maximum < dest:
-                    maximum = dest
-            temp = maximum
-            if temp < minMaxWeight:
-                center = node
-                minMaxWeight = temp
-        return center, minMaxWeight
+            """
+            Finds the node that has the shortest distance to it's farthest node.
+            :return: The nodes id, min-maximum distance
+            """
+            center = 0
+            minMaxWeight = float("inf")
+            for node in self.graph.get_all_v():
+                maximum = 0
+                distance = self.Dijkstra_v2(node)
+                for dest in distance.values():
+                    if maximum < dest:
+                        maximum = dest
+                temp = maximum
+                if temp < minMaxWeight:
+                    center = node
+                    minMaxWeight = temp
+            return center, minMaxWeight
 
     def plot_graph(self) -> None:
         """
@@ -96,7 +116,6 @@ class GraphAlgo(GraphAlgoInterface):
         Otherwise, they will be placed in a random but elegant manner.
         @return: None
         """
-        raise NotImplementedError
 
     #########################################################################
     #########################################################################
@@ -288,8 +307,13 @@ if __name__ == '__main__':
 
     g1 = DiGraph()
     GraphAlgo = GraphAlgo(g)
-  #  GraphAlgo.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A0.json")
-    GraphAlgo.load_from_json("C:\\Users\\malak\\OneDrive\\Desktop\\LargeConnectedGraphs\\10000Nodes.json")
+    #GraphAlgo.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A1.json")
+    #GraphAlgo.load_from_json("C:\\Users\\malak\\OneDrive\\Desktop\\LargeConnectedGraphs\\10000Nodes.json")
+    GraphAlgo.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A1.json")
 
     # print(GraphAlgo.shortest_path(1, 8))
-    print(GraphAlgo.centerPoint())
+    #print(GraphAlgo.centerPoint())
+    lst = []
+    for i in range(0, 17):
+        lst.append(i)
+    print(GraphAlgo.TSP(lst))
