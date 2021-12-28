@@ -125,6 +125,9 @@ class GraphAlgo(GraphAlgoInterface):
                 plt.annotate("", xy=(self.graph.Nodes[currEdge].getx(), self.graph.Nodes[currEdge].gety()),
                              xytext=(currNode.getx(), currNode.gety()),
                              arrowprops=dict(arrowstyle="<-", lw=1, alpha=0.7, color="navy"))
+                x = (self.graph.Nodes[currEdge].getx() + currNode.getx())/2
+                y = (self.graph.Nodes[currEdge].gety() + currNode.gety())/2
+                plt.text(x,y,float("{0:.3f}".format(self.graph.all_out_edges_of_node(currNode.getId())[currEdge])))
         plt.xlabel('X axis')
         plt.ylabel('Y axis')
         plt.grid(False)
