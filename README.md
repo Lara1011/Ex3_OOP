@@ -29,13 +29,13 @@ etc. <br>
 ---
 ### Plot Graph :
 
-#### Random plots:
+#### Json files plots:
 ![plot](https://github.com/Lara1011/Ex3_OOP/blob/832810486cbcbc6282e1438b596e3f9c92b9c0ba/Images/myplot3.png)
 ![plot](https://github.com/Lara1011/Ex3_OOP/blob/832810486cbcbc6282e1438b596e3f9c92b9c0ba/Images/myplot4.png)
 
 #### Plots from running main: 
-![plot](https://github.com/Lara1011/Ex3_OOP/blob/832810486cbcbc6282e1438b596e3f9c92b9c0ba/Images/myplot4.png)
-![plot](https://github.com/Lara1011/Ex3_OOP/blob/832810486cbcbc6282e1438b596e3f9c92b9c0ba/Images/myplot4.png)
+![plot](https://github.com/Lara1011/Ex3_OOP/blob/832810486cbcbc6282e1438b596e3f9c92b9c0ba/Images/myplot1.png)
+![plot](https://github.com/Lara1011/Ex3_OOP/blob/832810486cbcbc6282e1438b596e3f9c92b9c0ba/Images/myplot2.png)
 
 ### UML :
 
