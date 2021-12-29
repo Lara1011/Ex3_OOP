@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 from api.GraphAlgoInterface import GraphAlgoInterface
 from api.GraphInterface import GraphInterface
-from implementation.Node import Node
-from implementation.Edge import Edge
 from implementation.DiGraph import DiGraph
 import json
 import string
@@ -12,7 +10,7 @@ from typing import List, cast
 
 
 class GraphAlgo(GraphAlgoInterface):
-    #  sys.setrecursionlimit(10**6)
+
     def __init__(self, graph: DiGraph = None):
         if graph == None:
             graph = DiGraph()
@@ -28,8 +26,8 @@ class GraphAlgo(GraphAlgoInterface):
             data = json.load(open(file_name))
             for currNode in data["Nodes"]:
                 if "pos" in currNode:
-                    str = cast(string, currNode["pos"])
-                    splitString = str.split(',')
+                    strg = cast(string, currNode["pos"])
+                    splitString = strg.split(',')
                     self.graph.add_node(currNode["id"],
                                         (float(splitString[0]), float(splitString[1]), float(splitString[2])))
                 else:
@@ -42,19 +40,19 @@ class GraphAlgo(GraphAlgoInterface):
             return False
 
     def save_to_json(self, file_name: str) -> bool:
-        dict = {"Edges": [], "Nodes": []}
+        dicty = {"Edges": [], "Nodes": []}
         for edge in self.graph.Edges:
-            dict["Edges"].append({"src": self.graph.Edges[edge].getSrc(), "w": self.graph.Edges[edge].getWeight(),
-                                  "dest": self.graph.Edges[edge].getDest()})
+            dicty["Edges"].append({"src": self.graph.Edges[edge].getSrc(), "w": self.graph.Edges[edge].getWeight(),
+                                   "dest": self.graph.Edges[edge].getDest()})
 
         for node in self.graph.Nodes:
-            dict["Nodes"].append({"pos": (str(self.graph.Nodes[node].getx()) + "," + str(
+            dicty["Nodes"].append({"pos": (str(self.graph.Nodes[node].getx()) + "," + str(
                 self.graph.Nodes[node].gety()) + "," +
-                                          str(self.graph.Nodes[node].getz())), "id": self.graph.Nodes[node].getId()})
+                                           str(self.graph.Nodes[node].getz())), "id": self.graph.Nodes[node].getId()})
 
         try:
             with open(file_name, 'w') as f:
-                json.dump(dict, indent=2, fp=f)
+                json.dump(dicty, indent=2, fp=f)
             return True
         except Exception as e:
             print(e)
@@ -94,6 +92,14 @@ class GraphAlgo(GraphAlgoInterface):
         Finds the node that has the shortest distance to it's farthest node.
         :return: The nodes id, min-maximum distance
         """
+        try:
+            if not self.Is_Connected():
+                return None, float("inf")
+        except:
+            print("==> RecursionError: maximum recursion depth exceeded in comparison <==")
+            print("Continuing with the code without checking if the Graph is Connected ...")
+            pass
+
         center = 0
         minMaxWeight = float("inf")
         for node in self.graph.get_all_v():
@@ -115,8 +121,33 @@ class GraphAlgo(GraphAlgoInterface):
         Otherwise, they will be placed in a random but elegant manner.
         @return: None
         """
+        i = 0
+        j = 0
         plt.style.use("seaborn-whitegrid")
         for currNode in self.graph.Nodes.values():
+            if currNode.getx() == -1:
+                plt.plot(i, i, markersize=18, marker='o', color="hotpink")
+                plt.plot(i, i, currNode.getId(), color="black")
+                for currEdge in self.graph.all_out_edges_of_node(currNode.getId()):
+                    if self.graph.Nodes[currEdge].getx() == -1:
+                        plt.annotate("", xy=(j, j),
+                                     xytext=(i, i),
+                                     arrowprops=dict(arrowstyle="->", lw=3, alpha=0.7, color="navy"))
+                        x = (j + i) / 2
+                        y = (j + i) / 2
+                        plt.text(x, y,
+                                 float("{0:.3f}".format(self.graph.all_out_edges_of_node(currNode.getId())[currEdge])))
+                        j = j + 1
+                    else:
+                        for currEdge in self.graph.all_out_edges_of_node(currNode.getId()):
+                            plt.annotate("", xy=(self.graph.Nodes[currEdge].getx(), self.graph.Nodes[currEdge].gety()),
+                                         xytext=(i, i),
+                                         arrowprops=dict(arrowstyle="->", lw=3, alpha=0.7, color="navy"))
+                            x = (self.graph.Nodes[currEdge].getx() + i) / 2
+                            y = (self.graph.Nodes[currEdge].gety() + i) / 2
+                            plt.text(x, y, float(
+                                "{0:.3f}".format(self.graph.all_out_edges_of_node(currNode.getId())[currEdge])))
+                i = i + 1
             plt.plot(currNode.getx(), currNode.gety(), markersize=18, marker='o', color="hotpink")
             plt.text(currNode.getx(), currNode.gety(), currNode.getId(), color="black", fontsize=11, fontweight="bold",
                      horizontalalignment='center',
@@ -124,18 +155,25 @@ class GraphAlgo(GraphAlgoInterface):
             for currEdge in self.graph.all_out_edges_of_node(currNode.getId()):
                 plt.annotate("", xy=(self.graph.Nodes[currEdge].getx(), self.graph.Nodes[currEdge].gety()),
                              xytext=(currNode.getx(), currNode.gety()),
-                             arrowprops=dict(arrowstyle="<-", lw=1, alpha=0.7, color="navy"))
-                x = (self.graph.Nodes[currEdge].getx() + currNode.getx())/2
-                y = (self.graph.Nodes[currEdge].gety() + currNode.gety())/2
-                plt.text(x,y,float("{0:.3f}".format(self.graph.all_out_edges_of_node(currNode.getId())[currEdge])))
+                             arrowprops=dict(arrowstyle="->", lw=3, alpha=0.7, color="navy"))
+                x = (self.graph.Nodes[currEdge].getx() + currNode.getx()) / 2
+                y = (self.graph.Nodes[currEdge].gety() + currNode.gety()) / 2
+                plt.text(x, y, float("{0:.3f}".format(self.graph.all_out_edges_of_node(currNode.getId())[currEdge])))
         plt.xlabel('X axis')
         plt.ylabel('Y axis')
         plt.grid(False)
         plt.tight_layout()
         plt.show()
 
-    #########################################################################
-    #########################################################################
+    def Is_Connected(self):
+        return self.isStronglyConnected()
+
+    """
+    +---------------------------------------------------------------------+
+    | Helper functions: [Dijkstra, DFS, IsConnected]                      |
+    +---------------------------------------------------------------------+
+    """
+
     def Dijkstra_v2(self, src: int):
         distance = defaultdict(lambda: float('inf'))
         prev = {}
@@ -199,61 +237,6 @@ class GraphAlgo(GraphAlgoInterface):
             return float('inf'), []
         return weight, path
 
-    #########################################################################
-    #########################################################################
-
-    # DFS function
-    def dfsIn(self, node, graphIn: dict, vis1):
-        vis1[node] = True
-        if node not in graphIn:
-            graphIn[node] = {}
-
-        for currNode in graphIn[node]:
-            if (not vis1[currNode]):
-                self.dfsIn(currNode, graphIn, vis1)
-
-    # DFS function
-    def dfsOut(self, node, graphOut: dict, vis2):
-        vis2[node] = True
-
-        if node not in graphOut:
-            graphOut[node] = {}
-
-        for currNode in graphOut[node]:
-            if (not vis2[currNode]):
-                self.dfsOut(currNode, graphOut, vis2)
-
-    def Is_Connected(self):
-        graphIn = dict()
-        graphOut = dict()
-        for node in self.graph.Nodes:
-            graphIn[node] = list(self.graph.all_in_edges_of_node(node).keys())
-            graphOut[node] = list(self.graph.all_out_edges_of_node(node).keys())
-
-        vis1 = [0] * (self.graph.v_size())
-        vis2 = [0] * (self.graph.v_size())
-
-        # Call for correct direction
-        vis1 = [False] * len(vis1)
-        self.dfsIn(0, graphIn, vis1)
-
-        # Call for reverse direction
-        vis2 = [False] * len(vis2)
-        self.dfsOut(0, graphOut, vis2)
-
-        for i in range(0, self.graph.v_size()):
-
-            # If any vertex it not visited in any direction
-            # Then graph is not connected
-            if (not vis1[i] and not vis2[i]):
-                return False
-
-        # If graph is connected
-        return True
-
-    #########################################################################
-    #########################################################################
-
     def DFSUtil(self, node, visited, graph):
         visited[node] = True
         for i in graph[node]:
@@ -283,55 +266,60 @@ class GraphAlgo(GraphAlgoInterface):
 
         return True
 
+    '''
+    +---------------------------------------------------------------------+
+    | section of codes that we wrote and didn't use                       |
+    +---------------------------------------------------------------------+
+    '''
 
-#########################################################################
-#########################################################################
+    '''
+    def isWeaklyConnected(self):
+        graphIn = dict()
+        graphOut = dict()
+        for node in self.graph.Nodes:
+            graphIn[node] = list(self.graph.all_in_edges_of_node(node).keys())
+            graphOut[node] = list(self.graph.all_out_edges_of_node(node).keys())
 
+        vis1 = [0] * (self.graph.v_size())
+        vis2 = [0] * (self.graph.v_size())
 
-if __name__ == '__main__':
-    n0 = Node(0, 35.18753053591606, 32.10378225882353, 0.0)
-    n1 = Node(1, 35.18958953510896, 32.10785303529412, 0.0)
-    n2 = Node(2, 35.19341035835351, 32.10610841680672, 0.0)
-    n3 = Node(3, 35.197528356739305, 32.1053088, 0.0)
-    n4 = Node(4, 35.2016888087167, 32.10601755126051, 0.0)
-    # n5 = Node(5, 1, 1, 1)
+        # Call for correct direction
+        vis1 = [False] * len(vis1)
+        self.dfsIn(0, graphIn, vis1)
 
-    e0 = Edge(0, 2, 1)
-    e1 = Edge(0, 1, 1)
-    e2 = Edge(1, 3, 1)
-    e3 = Edge(2, 3, 5)
-    e4 = Edge(3, 2, 5)
-    e5 = Edge(3, 4, 1)
-    e6 = Edge(4, 0, 1)
-    # e7 = Edge(3, 5, 1)
+        # Call for reverse direction
+        vis2 = [False] * len(vis2)
+        self.dfsOut(0, graphOut, vis2)
 
-    g = DiGraph()
-    g.add_node(n0.getId(), (n0.getx(), n0.gety(), n0.getz()))
-    g.add_node(n1.getId(), (n1.getx(), n1.gety(), n1.getz()))
-    g.add_node(n2.getId(), (n2.getx(), n2.gety(), n2.getz()))
-    g.add_node(n3.getId(), (n3.getx(), n3.gety(), n3.getz()))
-    g.add_node(n4.getId(), (n4.getx(), n4.gety(), n4.getz()))
-    # g.add_node(n5.getId(), (n5.getx(), n5.gety(), n5.getz()))
+        for i in range(0, self.graph.v_size()):
 
-    g.add_edge(e0.getSrc(), e0.getDest(), e0.getWeight())
-    g.add_edge(e1.getSrc(), e1.getDest(), e1.getWeight())
-    g.add_edge(e2.getSrc(), e2.getDest(), e2.getWeight())
-    g.add_edge(e3.getSrc(), e3.getDest(), e3.getWeight())
-    g.add_edge(e4.getSrc(), e4.getDest(), e4.getWeight())
-    g.add_edge(e5.getSrc(), e5.getDest(), e5.getWeight())
-    g.add_edge(e6.getSrc(), e6.getDest(), e6.getWeight())
-    # g.add_edge(e7.getSrc(), e7.getDest(), e7.getWeight())
+            # If any vertex it not visited in any direction
+            # Then graph is not connected
+            if (not vis1[i] and not vis2[i]):
+                return False
 
-    g1 = DiGraph()
-    GraphAlgo = GraphAlgo(g)
-    # GraphAlgo.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A1.json")
-    # GraphAlgo.load_from_json("C:\\Users\\malak\\OneDrive\\Desktop\\LargeConnectedGraphs\\10000Nodes.json")
-    GraphAlgo.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A1.json")
+        # If graph is connected
+        return True
+        
+        
+     # DFS function
+    def dfsIn(self, node, graphIn: dict, vis1):
+        vis1[node] = True
+        if node not in graphIn:
+            graphIn[node] = {}
 
-    # print(GraphAlgo.shortest_path(1, 8))
-    # print(GraphAlgo.centerPoint())
-    GraphAlgo.plot_graph()
-    lst = []
-    for i in range(0, 17):
-        lst.append(i)
-    # print(GraphAlgo.TSP(lst))
+        for currNode in graphIn[node]:
+            if (not vis1[currNode]):
+                self.dfsIn(currNode, graphIn, vis1)
+
+    # DFS function
+    def dfsOut(self, node, graphOut: dict, vis2):
+        vis2[node] = True
+
+        if node not in graphOut:
+            graphOut[node] = {}
+
+        for currNode in graphOut[node]:
+            if (not vis2[currNode]):
+                self.dfsOut(currNode, graphOut, vis2)
+    '''
