@@ -40,5 +40,5 @@ In this project we implemented a directed weighted graph. Reading from json file
 |    A5   	|36ms |  41ms  |     39ms    |
 |    T0     |10ms |  2ms   |     3ms     |
 |   1000    |2.258sec|5.545sec|     10ms     | 
-|   10000   |8mins,12sec|        |     *     |
-|   100000  ||        |     *     |
+|   10000   |8mins,12sec|19min,28sec|     *     |
+|   100000  ||takes more than 10 hr|     *     |
