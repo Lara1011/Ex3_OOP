@@ -8,23 +8,23 @@ etc. <br>
 
 ### Packages :
 
-- __Images :__ In this package you will find UML image, running time images. <br>
-- __Tests :__ In this package contains Junit tests for each class. <br>
-- __api :__ In this package you will find all Interfaces and main class to test your implementation. <br>
-- __implementation :__ In this package you will find our implementation classes for the 2 interfaces, in addition to
+- __Images :__ This package contains UML image, running time images. <br>
+- __Tests :__ This package contains Junit tests for each class. <br>
+- __api :__ This package contains all the Interfaces and the main class to test the implementation. <br>
+- __implementation :__ This package contains our implementation classes for the 2 interfaces, in addition to
   Node and Edge class. <br>
-- __json files :__ In this package we have json files to test `load(String file)` method. <br>
+- __json files :__ This package contains json files to test `load(String file)` method. <br>
 
 ---
 
 ### Classes :
 
-1) __Edge :__ This class contains the source,destination and weight of this edge.
-2) __Node :__ This class contains the id,position(x,y,z),dictionary of edges out and dictionary of edges in of the node.
+1) __Edge :__ This class contains the source, destination and weight of this edge.
+2) __Node :__ This class contains the id, position(x,y,z), dictionary of edges out and dictionary of edges in of the node.
 3) __DiGraph :__ This class implements GraphInterface, it contains two dictionaries, one for the nodes and the other is
    for the edges, it also contains an counter named MC (short for Mode Count) that counts the changes made in graph.
 4) __GraphAlgo :__ This class implements GraphAlgoInterface, it contains a DiGraph(directed weighted graph) that we
-   implemented. <br> In this class we implemented some algorithms for searching shortest path,tsp, etc.
+   implemented. <br> In this class we implemented some algorithms for searching shortest-path, tsp, etc.
 
 ---
 
@@ -48,7 +48,7 @@ etc. <br>
 
 ### Performance Analysis :
 
-#### MacBook Pro [ CPU: 2.9 GHz Dual-Core Intel Core i5-6267U, Memory: 8 GB, GPU: Intel Iris Graphics 550 ]
+#### MacBook Pro [`CPU: 2.9 GHz Dual-Core Intel Core i5-6267U, Memory: 8 GB, GPU: Intel Iris Graphics 550`]
 
 | GraphSize | TSP       | Center     | IsConnected     |
 |-----------|-----------|------------|-----------------|
@@ -65,7 +65,7 @@ etc. <br>
 
 <br>
 
-#### MSI Laptop [ CPU: 2.60 GHz up to 4.5 GHz Intel Core i7-9750H 2.59 GHz, Memory: 16 GB, GPU: NVIDIA GeForce GTX 1660 Ti ]
+#### MSI Laptop [`CPU: 2.60 GHz up to 4.5 GHz Intel Core i7-9750H 2.59 GHz, Memory: 16 GB, GPU: NVIDIA GeForce GTX 1660 Ti`]
 
 | GraphSize | TSP       | Center     | IsConnected     |
 |-----------|-----------|------------|-----------------|
