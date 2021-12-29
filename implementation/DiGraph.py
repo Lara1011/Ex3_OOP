@@ -92,3 +92,6 @@ class DiGraph(GraphInterface):
                 pass
         else:
             pass
+
+    def __repr__(self):
+        return f"Graph: |V|={self.v_size()}, |E|={self.e_size()}"

@@ -6,19 +6,31 @@ from implementation.GraphAlgo import GraphAlgo
 
 # GraphAlgo.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A0.json")
 G0 = GraphAlgo(DiGraph())
-G0.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A0.json")
 G1 = GraphAlgo(DiGraph())
-G1.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A1.json")
 G2 = GraphAlgo(DiGraph())
-G2.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A2.json")
 G3 = GraphAlgo(DiGraph())
-G3.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A3.json")
 G4 = GraphAlgo(DiGraph())
-G4.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A4.json")
 G5 = GraphAlgo(DiGraph())
-G5.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A5.json")
 G6 = GraphAlgo(DiGraph())
+
+# Lara's Macbook
+"""""
+G0.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A0.json")
+G1.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A1.json")
+G2.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A2.json")
+G3.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A3.json")
+G4.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A4.json")
+G5.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/A5.json")
 G6.load_from_json("/Users/laraabu/PycharmProjects/Ex3_OOP/json files/T0.json")
+"""""
+# Malak's Laptop
+G0.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A0.json")
+G1.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A1.json")
+G2.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A2.json")
+G3.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A3.json")
+G4.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A4.json")
+G5.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\A5.json")
+G6.load_from_json("C:\\Users\\malak\\PycharmProjects\\Ex3_OOP\\json files\\T0.json")
 
 n0 = Node(0, 35.18753053591606, 32.10378225882353, 0.0)
 n1 = Node(1, 35.18958953510896, 32.10785303529412, 0.0)
@@ -147,7 +159,7 @@ class TestGraphAlgo(TestCase):
         self.assertEqual((2, 8.182236568942237), G3.centerPoint())
         self.assertEqual((6, 8.071366078651435), G4.centerPoint())
         self.assertEqual((40, 9.291743173960954), G5.centerPoint())
-        self.assertEqual((3, 0), G6.centerPoint())
+        self.assertEqual((None, float("inf")), G6.centerPoint())
 
     def test_plot_graph(self):
         G0.plot_graph()
@@ -158,7 +170,6 @@ class TestGraphAlgo(TestCase):
         G5.plot_graph()
         G6.plot_graph()
 
-
     def test_isStronglyConnected(self):
         self.assertTrue(G0.isStronglyConnected())
         self.assertTrue(G1.isStronglyConnected())
@@ -167,4 +178,3 @@ class TestGraphAlgo(TestCase):
         self.assertTrue(G4.isStronglyConnected())
         self.assertTrue(G5.isStronglyConnected())
         self.assertFalse(G6.isStronglyConnected())
-

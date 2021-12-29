@@ -31,7 +31,7 @@ class Node:
         self.y = y
 
     def getz(self):
-        if(self.z == None):
+        if (self.z == None):
             return -1
         return self.z
 
@@ -43,3 +43,6 @@ class Node:
 
     def getOut(self):
         return self.out_
+
+    def __repr__(self):
+        return f"{self.id}: |edges_out| {len(self.out_)} |edges in| {len(self.in_)}"
