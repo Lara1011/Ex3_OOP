@@ -50,32 +50,32 @@ etc. <br>
 
 #### MacBook Pro [`CPU: 2.9 GHz Dual-Core Intel Core i5-6267U, Memory: 8 GB, GPU: Intel Iris Graphics 550`]
 
-| GraphSize | TSP       | Center     | IsConnected     |
-|-----------|-----------|------------|-----------------|
-| A0        | 2 ms      | 4 ms       | 3 ms            |
-| A1        | 5 ms      | 3 ms       | 1 ms            |
-| A2        | 10 ms     | 13 ms      | 2 ms            |
-| A3        | 35 ms     | 54 ms      | 42 ms           |
-| A4        | 12 ms     | 39 ms      | 41 ms           |
-| A5        | 36 ms     | 41 ms      | 39 ms           |
-| T0        | 10 ms     | 2 ms       | 3 ms            |
-| 1000      | 2.258 sec | 5.545 sec  | 10 ms           | 
-| 10000     | 8.12 mins | 19.28 mins | RecursionError! |
-| 100000    | *         | *          | RecursionError! |
+| GraphSize | TSP       | Center     | IsConnected     | Shortest Path (between 1->10) |
+|-----------|-----------|------------|-----------------|-------------------------------|
+| A0        | 2 ms      | 4 ms       | 3 ms            | 3 ms                          |
+| A1        | 5 ms      | 3 ms       | 1 ms            | 4 ms                          |
+| A2        | 10 ms     | 13 ms      | 2 ms            | 6 ms                          |
+| A3        | 35 ms     | 54 ms      | 42 ms           | 3 ms                          |
+| A4        | 12 ms     | 39 ms      | 41 ms           | 4 ms                          |
+| A5        | 36 ms     | 41 ms      | 39 ms           | 2 ms                          |
+| T0        | 10 ms     | 2 ms       | 3 ms            | 3 ms                          |
+| 1000      | 2.258 sec | 5.545 sec  | 10 ms           | 24 ms                         |
+| 10000     | 8.12 mins | 19.28 mins | RecursionError! | 212 ms                        |
+| 100000    | *         | *          | RecursionError! | 5.370 sec                     |
 
 <br>
 
 #### MSI Laptop [`CPU: 2.60 GHz up to 4.5 GHz Intel Core i7-9750H 2.59 GHz, Memory: 16 GB, GPU: NVIDIA GeForce GTX 1660 Ti`]
 
-| GraphSize | TSP       | Center     | IsConnected     |
-|-----------|-----------|------------|-----------------|
-| A0        | 2 ms      | 3 ms       | 3 ms            |
-| A1        | 3 ms      | 3 ms       | 1 ms            |
-| A2        | 4 ms      | 4 ms       | 2 ms            |
-| A3        | 8 ms      | 8 ms       | 3 ms            |
-| A4        | 5 ms      | 6 ms       | 2 ms            |
-| A5        | 7 ms      | 9 ms       | 2 ms            |
-| T0        | 1 ms      | 3 ms       | 1 ms            |
-| 1000      | 1.79 sec  | 3.81 sec   | 4 ms            |
-| 10000     | 3.54 mins | 10,12 mins | RecursionError! |
-| 100000    | *         | too long   | RecursionError! |
+| GraphSize | TSP       | Center     | IsConnected     | Shortest Path (between 1->10) |
+|-----------|-----------|------------|-----------------|-------------------------------|
+| A0        | 2 ms      | 3 ms       | 3 ms            | 2 ms                          |
+| A1        | 3 ms      | 3 ms       | 1 ms            | 1 ms                          |
+| A2        | 4 ms      | 4 ms       | 2 ms            | 3 ms                          |
+| A3        | 8 ms      | 8 ms       | 3 ms            | 2 ms                          |
+| A4        | 5 ms      | 6 ms       | 2 ms            | 2 ms                          |
+| A5        | 7 ms      | 9 ms       | 2 ms            | 2 ms                          |
+| T0        | 1 ms      | 3 ms       | 1 ms            | 2 ms                          |
+| 1000      | 1.79 sec  | 3.81 sec   | 4 ms            | 155 ms                        |
+| 10000     | 3.54 mins | 10.12 mins | RecursionError! | 201 ms                        |
+| 100000    | *         | too long   | RecursionError! | 2.297 sec                     |
