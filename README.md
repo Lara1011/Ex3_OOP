@@ -27,13 +27,22 @@ etc. <br>
    implemented. <br> In this class we implemented some algorithms for searching shortest-path, tsp, etc.
 
 ---
+### Plot Graph :
 
-### UML:
+#### Random plots:
+![plot](https://github.com/Lara1011/Ex3_OOP/blob/832810486cbcbc6282e1438b596e3f9c92b9c0ba/Images/myplot3.png)
+![plot](https://github.com/Lara1011/Ex3_OOP/blob/832810486cbcbc6282e1438b596e3f9c92b9c0ba/Images/myplot4.png)
+
+#### Plots from running main: 
+![plot](https://github.com/Lara1011/Ex3_OOP/blob/832810486cbcbc6282e1438b596e3f9c92b9c0ba/Images/myplot4.png)
+![plot](https://github.com/Lara1011/Ex3_OOP/blob/832810486cbcbc6282e1438b596e3f9c92b9c0ba/Images/myplot4.png)
+
+### UML :
 
 ![UML](https://github.com/Lara1011/Ex3_OOP/blob/2e1f5d5f1ccb5f19a953f229103371f0ac47a482/Images/UML.png)
 ---
 
-### Algorithms:
+### Algorithms :
 
 - [Dijkstra Algorithm ](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm): Dijkstra's original algorithm found the
   shortest path between two given nodes.
